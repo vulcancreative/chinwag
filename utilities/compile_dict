@@ -1,0 +1,84 @@
+#! /usr/bin/env ruby
+
+TITLE          = "Dictionary to C Compiler"
+VERSION        = "1.0"
+UPDATE         = "2014-12-02"
+REVISION       = "3"
+USAGE          = "compile_dict [PATH TO INPUT DICT]"
+EXAMPLE_INPUT  = "compile_dict /dicts/seuss.h"
+
+def self.usage
+  "Usage: #{USAGE}"
+end
+
+def self.example
+  "input : #{EXAMPLE_INPUT}"
+end
+
+def self.help
+  "#{usage}\n\n#{example}\n" 
+end
+
+# check for info tags
+ARGV.each do |s|
+  if s =~ /^-{1,}h$/ || s =~ /^-{1,}help$/
+    print help
+    exit true
+  elsif s =~ /^-{1,}v$/ || s =~ /^-{1,}version$/
+    t = "#{TITLE}"
+    v = "#{VERSION}"
+    u = "(#{UPDATE} revision #{REVISION})"
+    print "#{t}, #{v} #{u}\n"
+    exit true
+  end
+end
+
+if ARGV.count > 0
+  # setup
+  count = 0
+  input_file = File.open(ARGV[0])
+  input_name = File.basename(ARGV[0], ".*")
+  input_text = ""
+
+  # read source into buffer
+  while line = input_file.gets; input_text += line; end
+
+  # modify give name, if necessary, in order to prevent redundancies
+  input_name.gsub!(/(dict|dict_|_dict)/, "")
+
+  # modify give text, if necessary
+  input_text = input_text.split(/[\r\n,;:\034]/).reject!(&:empty?).join(",")
+  input_text.gsub!(/,\s/, ",")
+  input_text.gsub!(/,,/, "")
+
+  # count tokens
+  count = input_text.count(",") + 1
+
+  # create C implementation for file
+  implementation_text =  ""
+  implementation_text += "#include \"../include/dicts/#{input_name}.h\"\n\n"
+  implementation_text += "const char* const dict_#{input_name} = "
+  implementation_text += "\"#{input_text}\";\n"
+  implementation_text += "const unsigned dict_#{input_name}_len = #{count};"
+
+  # create C interface for file
+  guard =  ""
+  guard += "__#{input_name.upcase}_"
+  guard += "#{(rand * 2821109907455).round.to_s(36).upcase}_H"
+
+  interface_text =  ""
+  interface_text += "#ifndef #{guard}\n#define #{guard}\n\n"
+  interface_text += "#include \"../chinwag.h\"\n\n"
+  interface_text += "extern const char* const dict_#{input_name};\n"
+  interface_text += "extern const unsigned dict_#{input_name}_len;\n\n"
+  interface_text += "#endif"
+
+  # write implementation and interface files out to disk
+  File.open(File.join(Dir.pwd, "#{input_name}.c"), 'w') do |file|
+    file.write implementation_text
+  end
+
+  File.open(File.join(Dir.pwd, "#{input_name}.h"), 'w') do |file|
+    file.write interface_text
+  end
+end
