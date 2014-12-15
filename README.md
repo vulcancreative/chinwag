@@ -12,20 +12,20 @@ Chinwag supersedes existing Lorem Ipsum algorithms in its ability to naturally e
 
 The latest version of Chinwag can be obtained from its Github repo:
 
-  % git clone https://github.com/vulcancreative/chinwag.git
+    % git clone https://github.com/vulcancreative/chinwag.git
 
 Upon obtaining the latest version, one can compile and run the tests with ease, prior to installation:
 
-  % make && make test # builds dictionaries and native library
-  % make install
+    % make && make test # builds dictionaries and native library
+    % make install
 
 Running the installation commands will result in the following installs
 
-  chinwag executable -> /usr/local/bin/
-  include/chinwag.h -> /usr/local/include/
-  include/chinwag -> /usr/local/include/
-  include/dicts -> /usr/local/include/
-  libchinwag.* -> /usr/local/lib/
+    chinwag executable -> /usr/local/bin/
+    include/chinwag.h -> /usr/local/include/
+    include/chinwag -> /usr/local/include/
+    include/dicts -> /usr/local/include/
+    libchinwag.* -> /usr/local/lib/
 
 == Caveats
 
