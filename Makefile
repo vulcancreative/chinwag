@@ -1,4 +1,4 @@
-APP_NAME=Babble
+APP_NAME=Chinwag
 CFLAGS=-Wall -O3
 DEBUG=-g -DCW_DEBUG
 DEEPD=-DCW_DEEP_DEBUG
@@ -19,25 +19,22 @@ LOREM_LIB=build/lib/libchinwag.a
 
 all: build/ lib $(DICTS) $(DEPTS) $(XCODE_PROJ)
 	$(CC) $(CFLAGS) rep.o $(LOREM_LIB) -o build/chinwag
-	@-rm -rf *.o *.h
 
 chinwag: build/ lib $(DICTS) $(DEPTS)
 	$(CC) $(CFLAGS) rep.o $(LOREM_LIB) -o build/chinwag
-	@-rm -rf *.o *.h
-	@-rm -rf build/lib
 
 lib: build/ build/lib/ $(DICTS) $(LIBDP)
 	$(A) $(AFLAGS) $(LOREM_LIB) $(LIBDP)
-	@-rm -rf *.o *.h
 
-test: build/ lib $(DICTS) $(DEPTS)
+test:
 	@-$(CC) $(CFLAGS) tests/chinwag_test.c $(LOREM_LIB) -o tests/chinwag_test
 	@-tests/chinwag_test
-	@-rm -rf *.o *.h
 
 install: build/chinwag
 	@-chmod +x build/chinwag
 	@-cp build/chinwag /usr/local/bin/
+	@-cp build/lib/libchinwag* /usr/local/lib/
+	@-cp -r include/* /usr/local/include/
 
 debug: build/ $(DICTS) $(DEPTS)
 	@-echo "making special *.o builds for debugging..."

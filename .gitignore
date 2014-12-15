@@ -5,9 +5,16 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore build files
+*.o
 /build
 /include/dicts
 /tests/chinwag_test
+
+# Ignore compiled dictionary files
+/src/seuss.c
+/src/latin.c
+/include/dicts/seuss.h
+/include/dicts/latin.h
 
 # Ignore system files
 .DS_Store
