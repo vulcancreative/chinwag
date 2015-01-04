@@ -15,7 +15,8 @@
 I32 result = EXIT_SUCCESS;
 U32 passed = 0, failed = 0;
 
-char* reset(char* buffer)
+char* reset
+(char* buffer)
 {
   passed = 0; failed = 0;
   buffer = memset(buffer, '\0', LARGE_BUFFER);
@@ -23,7 +24,8 @@ char* reset(char* buffer)
   return buffer;
 }
 
-char* detail_results(char* buffer, F32 time)
+char* detail_results
+(char* buffer, F32 time)
 {
   U32 len = strlen(buffer), total = passed + failed;
 
@@ -46,7 +48,8 @@ void pass()
   ++passed;
 }
 
-char* fail(const char* name, U32 expected, U32 got, char* buffer, char* s)
+char* fail
+(const char* name, U32 expected, U32 got, char* buffer, char* s)
 {
   char* sample = NULL;
   U32 len = strlen(s);
@@ -70,25 +73,26 @@ char* fail(const char* name, U32 expected, U32 got, char* buffer, char* s)
   return buffer;
 }
 
-char* testf(char* (*f)(unsigned long, unsigned long, dict_t), char* n, char* b, U32 c,...)
+char* testf
+(char* (*f)(unsigned long,unsigned long,cwdict_t),char* n,char* b,U32 c,...)
 {
-  dict_t d;
+  cwdict_t d;
   va_list arguments;
   U32 anchor = 0, got = 0;
   char* splitters = NULL; char* r = NULL;
 
-  if(include(n, "wrd_rng")) splitters = " ";
-  else if(include(n, "snt_rng")) splitters = ".!?";
-  else if(include(n, "pgf_rng")) splitters = "\r\n";
+  if(include(n, "cw_wrd_rng")) splitters = " ";
+  else if(include(n, "cw_snt_rng")) splitters = ".!?";
+  else if(include(n, "cw_pgf_rng")) splitters = "\r\n";
 
   va_start(arguments, c);
 
   for(U32 j = 0; j != c; ++j)
   {
-    d = va_arg(arguments, dict_t);
+    d = va_arg(arguments, cwdict_t);
     anchor = motherr(1500, 2500); r = (*f)(anchor, anchor, d);
 
-    if(include(n, "ltr_rng")) got = strlen(r);
+    if(include(n, "cw_ltr_rng")) got = strlen(r);
     else got = count(r, splitters);
 
     if(got != anchor)
@@ -106,7 +110,8 @@ char* testf(char* (*f)(unsigned long, unsigned long, dict_t), char* n, char* b, 
   return b;
 }
 
-U32 parse_amount(I32 argc, const char *argv[])
+U32 parse_amount
+(I32 argc, const char *argv[])
 {
   U32 amount = 1;
 
@@ -122,27 +127,27 @@ I32 main(I32 argc, const char *argv[])
   clock_t begin;
   U32 amount = parse_amount(argc, argv);
   char* buffer = (char*)malloc(LARGE_BUFFER);
-  dict_t seuss = open_dict_with_tokens(dict_seuss_test, DELIMITERS);
-  dict_t latin = open_dict_with_tokens(dict_latin_test, DELIMITERS);
+  cwdict_t seuss = cwdict_open_with_tokens(dict_seuss_test, DELIMITERS);
+  cwdict_t latin = cwdict_open_with_tokens(dict_latin_test, DELIMITERS);
 
-  validate_dict(seuss, "main");
-  validate_dict(latin, "main");
+  validate_cwdict(seuss, "main");
+  validate_cwdict(latin, "main");
 
   for(U32 i = 0; i != amount; ++i)
   {
     begin = clock();
-    buffer = test(ltr_rng, buffer, 2, seuss, latin);
-    buffer = test(wrd_rng, buffer, 2, seuss, latin);
-    buffer = test(snt_rng, buffer, 2, seuss, latin);
-    buffer = test(pgf_rng, buffer, 2, seuss, latin);
+    buffer = test(cw_ltr_rng, buffer, 2, seuss, latin);
+    buffer = test(cw_wrd_rng, buffer, 2, seuss, latin);
+    buffer = test(cw_snt_rng, buffer, 2, seuss, latin);
+    buffer = test(cw_pgf_rng, buffer, 2, seuss, latin);
     buffer = detail_results(buffer, (clock() - begin) / CLOCKS_PER_SEC);
 
     fprintf(stdout, "%s", buffer);
     buffer = reset(buffer);
   }
 
-  close_dict(seuss);
-  close_dict(latin);
+  cwdict_close(seuss);
+  cwdict_close(latin);
 
   free(buffer);
 

@@ -2,7 +2,7 @@
 
 I32 main(I32 argc, const char *argv[])
 {
-  dict_t dict;
+  cwdict_t dict;
   FILE* fp = NULL;
   char* buffer = NULL; char* file_buffer = NULL;
 
@@ -12,7 +12,7 @@ I32 main(I32 argc, const char *argv[])
   if(opt[0] == 0 || opt[1] == 0)
   {
     free(opt);
-    close_dict(dict);
+    cwdict_close(dict);
     return EXIT_FAILURE;
   }
   else if(opt[1] == 1) return EXIT_SUCCESS;
@@ -23,7 +23,7 @@ I32 main(I32 argc, const char *argv[])
     if(fp == NULL)
     {
       fprintf(stderr, "Expected valid dictionary file argument\n"); help();
-      close_dict(dict);
+      cwdict_close(dict);
       return EXIT_FAILURE;
     }
     else
@@ -32,7 +32,7 @@ I32 main(I32 argc, const char *argv[])
       if(stringify_result == 0)
       {
         fprintf(stderr, "Unable to read dictionary from file\n"); help();
-        close_dict(dict);
+        cwdict_close(dict);
         return EXIT_FAILURE;
       }
 
@@ -43,12 +43,12 @@ I32 main(I32 argc, const char *argv[])
   else if(opt[5] == 1) dict = tokenize(dict_latin, DELIMITERS);
   else dict = tokenize(dict_seuss, DELIMITERS);
 
-  validate_dict(dict, "main");
+  validate_cwdict(dict, "main");
 
   if(opt[6] == 1)
   {
-    dict = map_dict(dict, capitalize);
-    puts_dict(dict);
+    dict = cwdict_map(dict, capitalize);
+    puts_cwdict(dict);
     fprintf(stdout, "\ndict.count : %lu\n", dict.count);
   }
   else
@@ -62,7 +62,7 @@ I32 main(I32 argc, const char *argv[])
   }
 
   free(file_buffer); free(opt); free(buffer);
-  close_dict(dict);
+  cwdict_close(dict);
 
   return 0;
 }

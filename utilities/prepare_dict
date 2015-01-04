@@ -1,0 +1,81 @@
+#! /usr/bin/env ruby
+
+require 'fileutils'
+
+TITLE          = "Prepare Valid Babble Dictionary"
+VERSION        = "1.0"
+UPDATE         = "2014-12-28"
+REVISION       = "1"
+USAGE  = "prepare_dict /in/noise.txt [/out/noise] > /out/noise.dict"
+
+def self.usage
+  "usage: #{USAGE}"
+end
+
+# check for info tags
+ARGV.each do |s|
+  if s =~ /^-{1,}h$/ || s =~ /^-{1,}help$/
+    print help
+    exit true
+  elsif s =~ /^-{1,}v$/ || s =~ /^-{1,}version$/
+    t = "#{TITLE}"
+    v = "#{VERSION}"
+    u = "(#{UPDATE} revision #{REVISION})"
+    print "#{t}, #{v} #{u}\n"
+    exit true
+  end
+end
+
+if ARGV.count > 0
+  # setup
+  count = 0
+
+  input_file = File.open(ARGV[0])
+  input_name = File.basename(ARGV[0], ".*")
+  input_text = ""
+
+  output_path = nil
+  output_name = nil
+
+  if ARGV.count == 2
+    output_name = File.basename(ARGV[1], ".*")
+    output_path = File.dirname(ARGV[1])
+  else
+    output_name = input_name
+  end
+
+  # ensure proper extension
+  output_name += ".dict" unless output_name.end_with? ".dict"
+
+  # read source into buffer
+  while line = input_file.gets; input_text += line; end
+
+  # modify give name, if necessary, in order to prevent redundancies
+  input_name.gsub!(/(dict|dict_|_dict)/, "")
+
+  # modify give text, if necessary
+  output_text = input_text.split(/[\r\n,;:\034]/)
+  output_text = output_text.delete_if(&:empty?).uniq!.join(",")
+  output_text.gsub!(/,\s/, ",")
+  output_text.gsub!(/,,/, "")
+
+  # count tokens
+  count = output_text.split(",").count { |s| s !~ /\s/ }
+
+  # validate
+  if count < 300
+    raise Exception, "too few acceptable entries (#{count} of 300)"
+  end
+
+  # write dictionary to output file
+  if !output_path.nil? && !output_name.nil?
+    FileUtils.mkdir_p output_path unless File.directory? output_path
+    File.open(File.join(output_path,output_name),"w"){|f|f.write output_text}
+  elsif !output_name.nil?
+    File.open(File.join(Dir.pwd,output_name), "w") {|f| f.write output_text}
+  else
+    raise Exception, "unable to determine output file"
+  end
+else
+  puts usage
+end
