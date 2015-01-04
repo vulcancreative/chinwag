@@ -1,6 +1,7 @@
 C=gcc
 
-CFLAGS=-Wall -O3
+APP_NAME=Babble
+CFLAGS=-Wall -O3 -std=c99
 DEBUG=-g -DCW_DEBUG
 DEEPD=-DCW_DEEP_DEBUG
 
@@ -20,8 +21,26 @@ DICTS=include/dicts/latin.h include/dicts/seuss.h
 
 LOREM_LIB=build/lib/libchinwag.a
 
-all: build/ lib $(DICTS) $(DEPTS)
+XB=xcodebuild
+XCODE_PATH=$(APP_NAME)/
+XCODE_WS=-workspace $(APP_NAME).xcworkspace
+XCODE_PROJ=$(XCODE_PATH)$(APP_NAME).xcworkspace
+XCODE_RELEASE=$(XCODE_PATH)build/Release/$(APP_NAME).app
+
+XSYMR=SYMROOT=$(PWD)/build
+XSCHM=-scheme $(APP_NAME)
+XCONF=-configuration Release
+XCMD=clean build
+XCLN=clean
+
+all: build/ lib $(DICTS) $(DEPTS) $(XCODE_PROJ)
 	$(C) $(CFLAGS) rep.o $(LOREM_LIB) -o build/chinwag
+	cd $(XCODE_PATH);$(XB) $(XCODE_WS) $(XSCHM) $(XCONF) $(XCMD) $(SYMR);cd ..
+	@-rm -rf *.o *.h
+
+babble: $(XCODE_PROJ) build/ lib $(DICTS) $(DEPTS)
+	cd $(XCODE_PATH);$(XB) $(XCODE_WS) $(XSCHM) $(XCONF) $(XCMD) $(SYMR);cd ..
+	# @-killall $(APP_NAME); open $(XCODE_RELEASE) # cycle Babble app
 	@-rm -rf *.o *.h
 
 chinwag: build/ lib $(DICTS) $(DEPTS)
