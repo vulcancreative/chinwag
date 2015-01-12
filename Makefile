@@ -6,7 +6,7 @@ DEBUG=-g -DCW_DEBUG
 DEEPD=-DCW_DEEP_DEBUG
 
 A=ar
-AFLAGS=rvs
+AFLAGS=rvsc
 
 D=utilities/compile_dict
 
@@ -49,12 +49,17 @@ chinwag: build/ lib $(DICTS) $(DEPTS)
 	@-rm -rf build/lib
 
 lib: build/ build/lib/ $(DICTS) $(LIBDP)
-	$(A) $(AFLAGS) $(LOREM_LIB) $(LIBDP)
+	@-$(A) $(AFLAGS) $(LOREM_LIB) $(LIBDP) > /dev/null
 	@-rm -rf *.o *.h
 
 test: build/ lib $(DICTS) $(DEPTS)
 	@-$(C) $(CFLAGS) tests/chinwag_test.c $(LOREM_LIB) -o tests/chinwag_test
 	@-tests/chinwag_test
+	@-rm -rf *.o *.h
+
+test_silent: build/ lib $(DICTS) $(DEPTS)
+	@-$(C) $(CFLAGS) tests/chinwag_test.c $(LOREM_LIB) -o tests/chinwag_test
+	@-tests/chinwag_test --silent
 	@-rm -rf *.o *.h
 
 install: build/chinwag
@@ -132,9 +137,22 @@ include/dicts/latin.h: dict/latin
 	@-make dicts
 
 clean:
-	if [ -a "include/dicts/seuss.h" ]; then rm include/dicts/seuss.h; fi
-	if [ -a "include/dicts/latin.h" ]; then rm include/dicts/latin.h; fi
-	if [ -a "tests/chinwag_test" ]; then rm tests/chinwag_test; fi
-	if [ -a "src/seuss.c" ]; then rm src/seuss.c; fi
-	if [ -a "src/latin.c" ]; then rm src/latin.c; fi
-	rm -rf build *.o *.h
+	@-printf "removing assets"
+	@-if [ -a "include/dicts/seuss.h" ]; then rm include/dicts/seuss.h; fi
+	@-if [ -a "include/dicts/latin.h" ]; then rm include/dicts/latin.h; fi
+	@-printf "."
+	@-if [ -a "tests/chinwag_test" ]; then rm tests/chinwag_test; fi; printf "."
+	@-if [ -a "src/seuss.c" ]; then rm src/seuss.c; fi; printf "."
+	@-if [ -a "src/latin.c" ]; then rm src/latin.c; fi; printf "."
+	@-if [ -a "tmp" ]; then rm -r tmp; fi; printf ". done!\n"
+	@-printf "removing build files..... done!\n"
+	@-rm -rf build *.o *.h
+
+clean_silent:
+	@-if [ -a "include/dicts/seuss.h" ]; then rm include/dicts/seuss.h; fi
+	@-if [ -a "include/dicts/latin.h" ]; then rm include/dicts/latin.h; fi
+	@-if [ -a "tests/chinwag_test" ]; then rm tests/chinwag_test; fi
+	@-if [ -a "src/seuss.c" ]; then rm src/seuss.c; fi
+	@-if [ -a "src/latin.c" ]; then rm src/latin.c; fi
+	@-if [ -a "tmp" ]; then rm -r tmp; fi
+	@-rm -rf build *.o *.h

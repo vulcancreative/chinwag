@@ -1,0 +1,24 @@
+#! /usr/bin/env ruby
+
+require 'fileutils'
+require 'tempfile'
+
+ARGV.each_with_index do |s,i|
+  Dir.glob(s).each do |path|
+    temp = Tempfile.new('#{File.basename(path)}_temp#{File.extname(path)}')
+    File.open(path, 'r') do |file|
+      file.each_line do |line|
+        if line =~ /^#include.*(ruby|ruby\/io|rubyio|ruby\/intern|intern).*$/
+          temp.puts line.prepend("#")
+        elsif line =~ /^##include/
+          line.gsub! /##/, "#"
+          temp.puts line
+        else
+          temp.puts line
+        end
+      end
+    end
+    temp.close
+    FileUtils.mv(temp.path, path)
+  end
+end

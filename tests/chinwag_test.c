@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 #include "seuss_dict_test.h"
 #include "latin_dict_test.h"
@@ -14,12 +15,13 @@
 
 I32 result = EXIT_SUCCESS;
 U32 passed = 0, failed = 0;
+bool silent = true;
 
 char* reset
 (char* buffer)
 {
   passed = 0; failed = 0;
-  buffer = memset(buffer, '\0', LARGE_BUFFER);
+  buffer = memset(buffer, '\0', CW_LARGE_BUFFER);
 
   return buffer;
 }
@@ -33,17 +35,18 @@ char* detail_results
   "%.3f seconds]%s\n";
 
   if(failed > 0)
-    sprintf(&buffer[len], r, ANSI_COLOR_RED, passed, total, failed, 
+    sprintf(&buffer[len], r, ANSI_COLOR_RED, passed, total, failed,
     total, time, ANSI_COLOR_RESET);
   else
-    sprintf(&buffer[len],r, ANSI_COLOR_GREEN, passed, total, failed, 
+    sprintf(&buffer[len],r, ANSI_COLOR_GREEN, passed, total, failed,
     total, time, ANSI_COLOR_RESET);
-  
+
   return buffer;
 }
 
 void pass()
 {
+  if(!silent)
   fprintf(stdout, ANSI_COLOR_GREEN "." ANSI_COLOR_RESET); fflush(stdout);
   ++passed;
 }
@@ -64,8 +67,8 @@ char* fail
   char e[] = "\n\n%sERROR : function %s failed! "
   "Expected %d units, got %d units\n\n\"%s\"%s";
 
-  fprintf(stderr, ANSI_COLOR_RED "." ANSI_COLOR_RESET);
-  sprintf(&buffer[strlen(buffer)], e, ANSI_COLOR_RED, name, expected, got, 
+  if(!silent) fprintf(stderr, ANSI_COLOR_RED "." ANSI_COLOR_RESET);
+  sprintf(&buffer[strlen(buffer)], e, ANSI_COLOR_RED, name, expected, got,
   sample, ANSI_COLOR_RESET); free(sample);
   result = EXIT_FAILURE;
   ++failed;
@@ -74,7 +77,8 @@ char* fail
 }
 
 char* testf
-(char* (*f)(unsigned long,unsigned long,cwdict_t),char* n,char* b,U32 c,...)
+(char* (*f)(unsigned long, unsigned long, cwdict_t, cwerror_t*),
+char* n, char* b, U32 c, ...)
 {
   cwdict_t d;
   va_list arguments;
@@ -90,13 +94,13 @@ char* testf
   for(U32 j = 0; j != c; ++j)
   {
     d = va_arg(arguments, cwdict_t);
-    anchor = motherr(1500, 2500); r = (*f)(anchor, anchor, d);
+    anchor = motherr(1500, 2500); r = (*f)(anchor, anchor, d, NULL);
 
     if(include(n, "cw_ltr_rng")) got = strlen(r);
     else got = count(r, splitters);
 
     if(got != anchor)
-    { 
+    {
       b = fail(n, anchor, got, b, r);
       free(r); va_end(arguments); return b;
     }
@@ -122,13 +126,26 @@ U32 parse_amount
   return amount;
 }
 
+U32 check_silence
+(I32 argc, const char *argv[])
+{
+  for(int i = 0; i != argc; ++i)
+  {
+    if(include(argv[i], "-s") || include(argv[i], "--silent"))
+    return false;
+  }
+
+  return true;
+}
+
 I32 main(I32 argc, const char *argv[])
 {
   clock_t begin;
+  silent = check_silence(argc, argv);
   U32 amount = parse_amount(argc, argv);
-  char* buffer = (char*)malloc(LARGE_BUFFER);
-  cwdict_t seuss = cwdict_open_with_tokens(dict_seuss_test, DELIMITERS);
-  cwdict_t latin = cwdict_open_with_tokens(dict_latin_test, DELIMITERS);
+  char* buffer = (char*)malloc(CW_LARGE_BUFFER);
+  cwdict_t seuss = cwdict_open_with_tokens(dict_seuss_test, CW_DELIMITERS);
+  cwdict_t latin = cwdict_open_with_tokens(dict_latin_test, CW_DELIMITERS);
 
   validate_cwdict(seuss, "main");
   validate_cwdict(latin, "main");
@@ -142,7 +159,7 @@ I32 main(I32 argc, const char *argv[])
     buffer = test(cw_pgf_rng, buffer, 2, seuss, latin);
     buffer = detail_results(buffer, (clock() - begin) / CLOCKS_PER_SEC);
 
-    fprintf(stdout, "%s", buffer);
+    if(!silent) fprintf(stdout, "%s", buffer);
     buffer = reset(buffer);
   }
 

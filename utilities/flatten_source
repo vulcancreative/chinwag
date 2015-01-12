@@ -1,0 +1,32 @@
+#! /usr/bin/env ruby
+
+require 'fileutils'
+require 'tempfile'
+
+ARGV.each_with_index do |s,i|
+  Dir.glob(s).each do |path|
+    temp = Tempfile.new('#{File.basename(path)}_temp#{File.extname(path)}')
+    File.open(path, 'r') do |file|
+      file.each_line do |line|
+        if line =~ /#include/ && line !~ /#include <.*>/
+          if line =~ /\.\.\/include\/chinwag\//
+            line.gsub! /\.\.\/include\/chinwag\//, ""
+          elsif line =~ /\.\.\/include\/dicts\//
+            line.gsub! /\.\.\/include\/dicts\//, ""
+          elsif line =~ /#include\s"dicts\//
+            line.gsub! /#include\s"dicts\//, "#include \""
+          elsif line =~ /#include\s"chinwag\//
+            line.gsub! /#include\s"chinwag\//, "#include \""
+          elsif line =~ /\.\.\/include\//
+            line.gsub! /\.\.\/include\//, ""
+          elsif line =~ /#include\s"\.\.\/chinwag\.h"/
+            line.gsub! /#include\s"\.\.\/chinwag\.h"/, "#include \"chinwag.h\""
+          end
+        end
+        temp.puts line
+      end
+    end
+    temp.close
+    FileUtils.mv(temp.path, path)
+  end
+end

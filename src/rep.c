@@ -36,12 +36,12 @@ I32 main(I32 argc, const char *argv[])
         return EXIT_FAILURE;
       }
 
-      dict = tokenize(file_buffer, DELIMITERS);
+      dict = tokenize(file_buffer, CW_DELIMITERS);
       fclose(fp);
     }
   }
-  else if(opt[5] == 1) dict = tokenize(dict_latin, DELIMITERS);
-  else dict = tokenize(dict_seuss, DELIMITERS);
+  else if(opt[5] == 1) dict = tokenize(dict_latin, CW_DELIMITERS);
+  else dict = tokenize(dict_seuss, CW_DELIMITERS);
 
   validate_cwdict(dict, "main");
 
@@ -55,7 +55,7 @@ I32 main(I32 argc, const char *argv[])
   {
     // char* result = pgf_rng(opt[3], opt[4], dict);
     // char* result = ltr_rng(33333, 33333, dict);
-    char* result = chinwag(opt[2], opt[3], opt[4], dict);
+    char* result = chinwag(opt[2], opt[3], opt[4], dict, NULL);
 
     fprintf(stdout, "%s\n", result);
     free(result);

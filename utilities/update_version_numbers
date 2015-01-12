@@ -1,0 +1,30 @@
+#! /usr/bin/env ruby
+
+require 'fileutils'
+require 'tempfile'
+
+config = File.open("src/config.c", 'rb').read
+version = config.scan(/"\d+\.\d+\.\d+";/)[0]
+version.tr! "\";", ""
+
+ARGV.each_with_index do |s,i|
+  Dir.glob(s).each do |path|
+    temp = Tempfile.new('#{File.basename(path)}_temp#{File.extname(path)}')
+    base = File.basename(path)
+    ext = File.extname(path)
+    File.open(path, 'r') do |file|
+      file.each_line do |line|
+        if base == "Rakefile" && line =~ /chinwag",\s"\d+\.\d+\.\d+"/
+          line.gsub! /\d+\.\d+\.\d+/, version
+        elsif ext =~ /md/ && line =~ /\d+\.\d+\.\d+/
+          line.gsub! /\d+\.\d+\.\d+/, version
+        elsif ext =~ /go/ && line =~ /"\d+\.\d+\.\d+"/
+          line.gsub! /\d+\.\d+\.\d+/, version
+        end
+        temp.puts line
+      end
+    end
+    temp.close
+    FileUtils.mv(temp.path, path)
+  end
+end

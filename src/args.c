@@ -29,7 +29,7 @@ U32 help(void)
   "its name as the \"-d\" file path argument (e.g. - \"seuss\" or \"latin\").\n"
   ;
 
-  buffer = (char*)malloc(LARGE_BUFFER);
+  buffer = (char*)malloc(CW_LARGE_BUFFER);
   sprintf(buffer, "%s", text);
   fprintf(stdout, "%s", buffer);
 
@@ -41,9 +41,9 @@ U32 version(void)
   char *buffer;
   char text[] = "Babble::Lorem, %d.%d.%d (%s-%s-%s revision %s)\n";
 
-  buffer = (char*)malloc(SMALL_BUFFER);
-  sprintf(buffer, text, MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION,
-                        DATE_YEAR, DATE_MONTH, DATE_DAY, REVISION);
+  buffer = (char*)malloc(CW_SMALL_BUFFER);
+  sprintf(buffer, text, CW_VERSION, CW_DATE_YEAR, CW_DATE_MONTH, 
+  CW_DATE_DAY, CW_REVISION);
   fprintf(stdout, "%s", buffer);
 
   free(buffer); return EXIT_SUCCESS;
@@ -58,9 +58,9 @@ U32 *measure_args(I32 argc, const char *argv[], FILE **fp)
   // set defaults
   opt[0] = 5; // number of options
   opt[1] = 2; // state - 0:exit failed, 1:exit success, >1:continue
-  opt[2] = CW_DEFAULT; // output type
-  opt[3] = DEFAULT_MIN_OUTPUT_LENGTH; // min output
-  opt[4] = DEFAULT_MAX_OUTPUT_LENGTH; // max output
+  opt[2] = CW_DEFAULT_TYPE; // output type
+  opt[3] = CW_DEFAULT_MIN_OUTPUT; // min output
+  opt[4] = CW_DEFAULT_MAX_OUTPUT; // max output
   opt[5] = 0; // dict - 0:seuss, 1:latin, >2:external
   opt[6] = 0; // print - 0:do nothing, 1:print then close
 

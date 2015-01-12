@@ -6,7 +6,7 @@ TITLE          = "Prepare Valid Babble Dictionary"
 VERSION        = "1.0"
 UPDATE         = "2014-12-28"
 REVISION       = "1"
-USAGE  = "prepare_dict /in/noise.txt [/out/noise] > /out/noise.dict"
+USAGE          = "prepare_dict /in/noise.txt [/out/noise] > /out/noise.dict"
 
 def self.usage
   "usage: #{USAGE}"
