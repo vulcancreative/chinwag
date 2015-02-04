@@ -18,10 +18,9 @@ The library universally features:
 
 
 ```shell
-# also installs the command-line application
-
-$ brew install chinwag # Homebrew on Mac OS X
-$ sudo apt-get install chinwag # APT on Linux
+git clone https://github.com/vulcancreative/chinwag.git
+cd chinwag
+make && make install
 ```
 
 ## Versioning
