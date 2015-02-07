@@ -99,12 +99,22 @@ If you need a valid, custom dictionary to test against, we recommend our <a href
 #include <stdio.h>
 #include <stdlib.h>
 #include <chinwag.h>
-char* tokens = NULL;
+char *result = NULL, *tokens = NULL;
 cwdict_t noise = cwdict_open();
+cwerror_t e;
+
 FILE* fi = fopen("noise.dict", "r");
-stringify_file(&tokens, fi); fclose(fi);
-noise = cwdict_open_with_name_and_tokens("noise", tokens, CW_DELIMITERS);
-free(tokens); cwdict_close(noise);
+
+if(fi)
+{
+  stringify_file(&tokens, fi); fclose(fi);
+  noise = cwdict_open_with_name_and_tokens("noise", tokens, CW_DELIMITERS);
+  free(tokens); cwdict_close(noise);
+}
+else
+{
+	// handle IO error...
+}
 ```
 
 ```sample
