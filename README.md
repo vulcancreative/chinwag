@@ -18,9 +18,11 @@ The library universally features:
 
 
 ```shell
-git clone https://github.com/vulcancreative/chinwag.git
-cd chinwag
-make && make install
+# also installs the command-line application
+
+$ git clone https://github.com/vulcancreative/chinwag.git
+$ cd chinwag
+$ make && sudo make install
 ```
 
 ## Versioning
