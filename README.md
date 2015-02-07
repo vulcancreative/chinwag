@@ -62,6 +62,31 @@ cwdict_t latin = cwdict_open_with_tokens(dict_latin, CW_DELIMITERS);
 
 ```sample
 // EXAMPLE OUT
+seuss: {
+	name: "Seussian",
+	// is a function, not a property of the struct
+	cwdict_length(): 1096,
+	// is a function, not a property of the struct
+	cwdict_valid(): true,
+	sorted: true,
+	_: [
+		[I, a], [TV, am, an, as, at, be, ...
+		[Mordecai Ali Van Allen O'Shea]
+	]
+}
+
+latin: {
+	name: "Latin",
+	// is a function, not a property of the struct
+	cwdict_length(): 35664,
+	// is a function, not a property of the struct
+	cwdict_valid(): true,
+	sorted: true
+	_: [
+		[a, b, c, d, e, f, k, l, m, n, o, ...
+		semicircumferentia, supersubstantialis, supertriparticular]
+	]
+}
 ```
 
 
