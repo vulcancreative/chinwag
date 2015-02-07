@@ -94,6 +94,35 @@ latin: {
 
 If you need a valid, custom dictionary to test against, we recommend our <a href="http://vulcanca.com/babble/docs/noise.dict" target="_blank">Noise dictionary</a>. It has several thousand entries, and will have no problem passing any and all internal validation procedures.
 
+```c
+// EXAMPLE IN
+#include <stdio.h>
+#include <stdlib.h>
+#include <chinwag.h>
+char* tokens = NULL;
+cwdict_t noise = cwdict_open();
+FILE* fi = fopen("noise.dict", "r");
+stringify_file(&tokens, fi); fclose(fi);
+noise = cwdict_open_with_name_and_tokens("noise", tokens, CW_DELIMITERS);
+free(tokens); cwdict_close(noise);
+```
+
+```sample
+// EXAMPLE OUT
+noise: {
+	name: "noise",
+	// is a function, not a property of the struct
+	cwdict_length(): 18957,
+	// is a function, not a property of the struct
+	cwdict_valid(): true,
+	sorted: true,
+	_: [
+		[g, s, u, z, l, h, i, a, m, v, o, q, ...
+		pzhvbzvnsdozcuxpgldrwylvedosnbbktoyi]
+	]
+}
+```
+
 
 ### Opening a Blank Dictionary
 
