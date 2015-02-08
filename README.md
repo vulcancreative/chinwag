@@ -175,6 +175,8 @@ puts_cwdict(seuss);
 
 ```sample
 // EXAMPLE OUT
+[[I, a], [TV, am, an, as, at, be, ...
+[Dibble Dibble Dibble Dribble], [Mordecai Ali Van Allen O'Shea]]
 ```
 
 
