@@ -149,6 +149,15 @@ cwdict_t blank = cwdict_open();
 
 ```sample
 // EXAMPLE OUT
+blank: {
+	name: NULL,
+	// is a function, not a property of the struct
+	cwdict_length(): 0,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: []
+}
 ```
 
 
