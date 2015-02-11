@@ -188,19 +188,43 @@ puts_cwdict(seuss);
 #include <stdlib.h>
 #include <chinwag.h>
 char** words = (char**)malloc(sizeof(char*) * 2);
+cwdict_t ungrouped = cwdict_open();
+cwdict_t grouped = cwdict_open();
 words[0] = (char*)malloc(20); // setup first buffer
 words[1] = (char*)malloc(20); // setup second buffer
 strcpy(words[0], "quick"); strcpy(words[1], "test");
 words[0][6] = '\0'; words[1][5] = '\0';
-cwdict_t blank = cwdict_open();
-blank = cwdict_place_word_strict(blank, "test");
-blank = cwdict_place_words_strict(blank, words, 2);
+ungrouped = cwdict_place_word_strict(grouped, "test");
+grouped = cwdict_place_words_strict(ungrouped, words, 2);
 // Performs a deep copy, so words buffer can
-// be closed, as they are no longer needed
+// be closed, as it is no longer needed
 ```
 
 ```sample
 // EXAMPLE OUT
+ungrouped: {
+	name: NULL,
+	// is a function, not a property of the struct
+	cwdict_length(): 1,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: [
+		[test]
+	]
+}
+
+grouped: {
+	name: NULL,
+	// is a function, not a property of the struct
+	cwdict_length(): 2,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: [
+		[quick], [test]
+	]
+}
 ```
 
 
