@@ -19,6 +19,7 @@ The library universally features:
 
 ```shell
 # also installs the command-line application
+# will be available via Homebrew and APT shortly!
 
 $ git clone https://github.com/vulcancreative/chinwag.git
 $ cd chinwag
