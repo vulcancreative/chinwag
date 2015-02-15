@@ -263,6 +263,7 @@ cwdict_t copy = cwdict_clone(seuss);
 
 ### Closing a Dictionary
 
+By default, when closing a dictionary, a blank dictionary is returned. This value can be ignored, if desired.
 
 ```c
 // EXAMPLE IN
