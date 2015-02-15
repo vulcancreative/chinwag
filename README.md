@@ -267,6 +267,11 @@ cwdict_t copy = cwdict_clone(seuss);
 ```c
 // EXAMPLE IN
 #include <chinwag.h>
+cwdict_t seuss = cwdict_open_with_name_and_tokens("Seussian",
+dict_seuss, CW_DELIMITERS);
+cwdict_t latin = cwdict_open_with_name_and_tokens("Seussian",
+dict_seuss, CW_DELIMITERS);
+cwdict_close(latin);
 cwdict_t blank = cwdict_close(seuss);
 // Clears all of seuss' internal, dynamic memory,
 // and resets it to a blank dictionary, which
@@ -275,6 +280,35 @@ cwdict_t blank = cwdict_close(seuss);
 
 ```sample
 // EXAMPLE OUT
+seuss: {
+	name: NULL,
+	// is a function, not a property of the struct
+	cwdict_length(): 0,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: []
+}
+
+latin: {
+	name: NULL,
+	// is a function, not a property of the struct
+	cwdict_length(): 0,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: []
+}
+
+blank: {
+	name: NULL,
+	// is a function, not a property of the struct
+	cwdict_length(): 0,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: []
+}
 ```
 
 ## Validation and Errors
