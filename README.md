@@ -317,14 +317,27 @@ CWERROR_DICT_TOO_SMALL : too few acceptable entries (0 of 300)
 #include <stdio.h>
 #include <stdlib.h>
 #include <chinwag.h>
+cwerror_t err;
 cwdict_t seuss = cwdict_open_with_name_and_tokens("Seussian",
 dict_seuss, CW_DELIMITERS);
-char* output = chinwag(CW_WORDS, 10, 20, seuss); free(output);
-// Generates ten to twenty words in Seussian
+char* output = chinwag(CW_WORDS, 10, 20, seuss, &err);
+puts(output); free(output);
+// Prints ten to twenty words in Seussian
+cw_default_type = CW_LETTERS;
+cw_default_max_output = 30;
+// Max must be set first if higher than min
+cw_default_min_output = 30;
+output = chinwag_defaults(seuss, &err);
+puts(output); free(output); cwdict_close(seuss);
+// Prints thirty letters using defaults
 ```
 
 ```sample
 // EXAMPLE OUT
+A With Monkeys Everywhere I Comes Stew Mostly Lasso Shout
+Confused Congratulations When Blackbottomed
+
+Wonderfully Her Amounts Feetae
 ```
 
 ## Legal

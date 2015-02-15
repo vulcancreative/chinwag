@@ -70,6 +70,11 @@ typedef struct dictionary_container_type {
 #include "chinwag/dict.h"
 #include "chinwag/args.h"
 
+// external statics
+extern cw_t cw_default_type;
+extern unsigned long cw_default_min_output;
+extern unsigned long cw_default_max_output;
+
 char* chinwag
 (cw_t type, unsigned long min, unsigned long max, cwdict_t dict, cwerror_t* e);
 
@@ -84,6 +89,8 @@ char* cw_snt_rng
 
 char* cw_pgf_rng
 (unsigned long min, unsigned long max, cwdict_t dict, cwerror_t* e);
+
+char* chinwag_defaults(cwdict_t dict, cwerror_t* e);
 
 #define cw_ltr(amt, dict, err) cw_ltr_rng(amt, amt, dict, err)
 #define cw_wrd(amt, dict, err) cw_wrd_rng(amt, amt, dict, err)

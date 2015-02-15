@@ -522,7 +522,7 @@ bool cwdict_blanks
 bool cwdict_valid
 (cwdict_t dict, cwerror_t* error)
 {
-  U32 count = 0;
+U32 count = 0;
 
   for(U32 i = 0; i != dict.count; ++i)
   {
