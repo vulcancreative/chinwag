@@ -183,6 +183,7 @@ puts_cwdict(seuss);
 
 ### Dictionary Arithmetic
 
+Whether using an embedded dictionary, or something custom, you can concatenate new entries in the form of strings. This is particularly useful if you have a blank dictionary, and gradually want to build upon it by adding in information dynamically.
 
 ```c
 // EXAMPLE IN
