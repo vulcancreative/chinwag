@@ -393,6 +393,9 @@ blank: {
 ## Validation and Errors
 
 
+Upon loading a foreign dictionary, it is crucial to test its validity, prior to use. This checks that the library will be capable of understanding the dictionary format properly, and, if so, ensures adequate randomization for our synthesis algorithms.
+
+Embedded dictionaries have already been thoroughly tested, and need no further validation. This, in turn, grants the embedded resources an additional speed boost.
 
 ```c
 // EXAMPLE IN
