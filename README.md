@@ -303,10 +303,33 @@ Nevertheless, we allow deep copies, via the library. Duplication will respect an
 cwdict_t seuss = cwdict_open_with_name_and_tokens("Seussian",
 dict_seuss, CW_DELIMITERS);
 cwdict_t copy = cwdict_clone(seuss);
+seuss = cwdict_close(seuss);
 ```
 
 ```sample
 // EXAMPLE OUT
+seuss: {
+	name: "",
+	// is a function, not a property of the struct
+	cwdict_length(): 0,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_ : []
+}
+
+copy: {
+	name: "Seussian",
+	// is a function, not a property of the struct
+	cwdict_length(): 1096,
+	// is a function, not a property of the struct
+	cwdict_valid(): true,
+	sorted(): true,
+	_: [
+		[I, a], [TV, am, an, as, at, be, ...
+		[Mordecai Ali Van Allen O'Shea]
+	]
+}
 ```
 
 
