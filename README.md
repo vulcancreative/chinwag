@@ -362,6 +362,7 @@ caps: {
 		[THESE, WORDS], [WILL], [BE], [CAPITALIZED]
 	]
 }
+```
 
 
 ### Closing a Dictionary
