@@ -4,7 +4,7 @@ const char* const CW_VERSION = "1.2.3";
 const char* const CW_DATE_YEAR = "2015";
 const char* const CW_DATE_MONTH = "02";
 const char* const CW_DATE_DAY = "15";
-const char* const CW_REVISION = "102";
+const char* const CW_REVISION = "103";
 
 const unsigned CW_SMALL_BUFFER = 1024;
 const unsigned CW_LARGE_BUFFER = 5120;

@@ -356,61 +356,6 @@ cwdict_t cwdict_sort
   return dict;
 }
 
-/*
-cwdict_t cwdict_prune
-(cwdict_t dict, bool sorted)
-{
-  U32 len = 0, size = 0, null_count = 0;
-  char* against = NULL;
-
-  for(U32 i = 0; i != dict.count; ++i)
-  {
-    for(U32 j = 0; j != dict.drows[i].count; ++j)
-    {
-      if(dict.drows[i].words[j] == NULL) continue;
-      against = dict.drows[i].words[j];
-
-      for(U32 k = 0; k != dict.drows[i].count; ++k)
-      {
-        if(dict.drows[i].words[k] == NULL) continue;
-        if(strcmp(against, dict.drows[i].words[k]) == 0 && k != j)
-        {
-          free(dict.drows[i].words[k]);
-          dict.drows[i].words[k] = NULL;
-        }
-      }
-    }
-  }
-
-  // sort drows within dict
-  if(sorted) dict = cwdict_sort(dict);
-
-  // resize individual drows within dict
-  for(U32 i = 0; i != dict.count; ++i)
-  {
-    null_count = 0;
-
-    for(U32 j = 0; j != dict.drows[i].count; ++j)
-    {
-      if(dict.drows[i].words[j] == NULL) ++null_count;
-    }
-
-    if(null_count > 0)
-    {
-      len = dict.drows[i].count - null_count;
-      size = sizeof(char*) * len;
-
-      dict.drows[i].words = (char**)realloc(dict.drows[i].words, size);
-      dict.drows[i].count = len;
-    }
-  }
-
-  if(cwdict_blanks(dict)) dict = cwdict_prune(dict, sorted);
-
-  return dict;
-}
-*/
-
 cwdict_t cwdict_prune
 (cwdict_t dict, bool sorted, bool deep)
 {
