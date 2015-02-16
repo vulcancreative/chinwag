@@ -236,7 +236,6 @@ While generation requires a dictionary to be sorted by length, it is also best-p
 
 ```c
 // EXAMPLE IN
-#include <stdlib.h>
 #include <chinwag.h>
 const char* const s[] = {"this", "is", "a", "quick", "test"};
 const char* const p[] = {"something", "something", "another", "done"};
