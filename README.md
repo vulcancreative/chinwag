@@ -187,19 +187,13 @@ Whether using an embedded dictionary, or something custom, you can concatenate n
 
 ```c
 // EXAMPLE IN
-#include <stdlib.h>
 #include <chinwag.h>
-char** words = (char**)malloc(sizeof(char*) * 2);
-cwdict_t ungrouped = cwdict_open();
+const char* const g[] = {"these", "are", "some", "test", "words"};
+const char* const u[] = {"these", "words", "will", "be", "sorted"};
 cwdict_t grouped = cwdict_open();
-words[0] = (char*)malloc(20); // setup first buffer
-words[1] = (char*)malloc(20); // setup second buffer
-strcpy(words[0], "quick"); strcpy(words[1], "test");
-words[0][6] = '\0'; words[1][5] = '\0';
-ungrouped = cwdict_place_word_strict(grouped, "test");
-grouped = cwdict_place_words_strict(ungrouped, words, 2);
-// Performs a deep copy, so words buffer can
-// be closed, as it is no longer needed
+cwdict_t ungrouped = cwdict_open();
+grouped = cwdict_place_words(grouped, g, 5);
+ungrouped = cwdict_place_words_strict(ungrouped, u, 5);
 ```
 
 ```sample
