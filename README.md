@@ -335,8 +335,33 @@ copy: {
 
 ### In-Place Modification
 
+Occasionally, one needs to make modifications directly to a dictionary instance. We allow for modifying the instance's internal entries directly via cwdict_map, which takes a function pointer. This is particularly useful for, say, converting all entries to uppercase.
 
+The library comes packed with three convenience methods : `upcase`, `downcase`, and `capitalize`.
 
+```c
+#include <chinwag.h>
+const char* const c[] = {"these", "words", "will", "be", "capitalized"};
+cwdict_t caps = cwdict_open_with_name("Caps");
+caps = cwdict_place_words_strict(caps, c, 5);
+cwdict_map(caps, upcase);
+// cwdict_map requires function pointer
+// signature of char*(*f)(char*)
+```
+
+```sample
+// EXAMPLE OUT
+caps: {
+	name: "Caps",
+	// is a function, not a property of the struct
+	cwdict_length(): 5,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_: [
+		[THESE, WORDS], [WILL], [BE], [CAPITALIZED]
+	]
+}
 
 
 ### Closing a Dictionary
