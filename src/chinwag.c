@@ -109,7 +109,7 @@ char* cw_ltr_rng
   }
 
   // post-process dict (pass utility::capitalize function as parameter)
-  temp = cwdict_prune(temp, false);
+  temp = cwdict_prune(temp, false, false);
   temp = cwdict_map(temp, capitalize);
   result = cwdict_join(temp, " ");
 

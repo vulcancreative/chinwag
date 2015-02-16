@@ -232,8 +232,70 @@ grouped: {
 
 ### Sorting and Pruning
 
+While generation requires a dictionary to be sorted by length, it is also best-practice to prune your dictionary of repeat elements. Cleaning both sorts and prunes.
 
+```c
+// EXAMPLE IN
+#include <stdlib.h>
+#include <chinwag.h>
+const char* const s[] = {"this", "is", "a", "quick", "test"};
+const char* const p[] = {"something", "something", "another", "done"};
+const char* const c[] = {"first", "second", "first", "second", "third"};
+cwdict_t sorted = cwdict_open_with_name("Sorted");
+cwdict_t pruned = cwdict_open_with_name("Pruned");
+cwdict_t cleaned = cwdict_open_with_name("Cleaned");
+sorted = cwdict_place_words_strict(sorted, s, 5);
+pruned = cwdict_place_words_strict(pruned, p, 4);
+cleaned = cwdict_place_words_strict(cleaned, c, 5);
+sorted = cwdict_sort(sorted);
+// orders by entry length,
+// meeting generation requirements
+pruned = cwdict_prune(pruned, false, true);
+// removes duplicates, retains placement
+// needs to be sorted before generating
+cleaned = cwdict_clean(cleaned);
+// removes duplicates and sorts,
+// meeting generation requirements
+```
 
+```sample
+// EXAMPLE OUT
+sorted: {
+	name: "Sorted",
+	// is a function, not a property of the struct
+	cwdict_length(): 5,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: true,
+	_ : [
+		[a], [is], [test, this], [quick]
+	]
+}
+
+pruned: {
+	name: "Pruned",
+	// is a function, not a property of the struct
+	cwdict_length(): 3,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: false,
+	_ : [
+		[something], [another], [done]
+	]
+}
+
+cleaned: {
+	name: "Cleaned",
+	// is a function, not a property of the struct
+	cwdict_length(): 3,
+	// is a function, not a property of the struct
+	cwdict_valid(): false,
+	sorted: true,
+	_: [
+		[first, third], [second]
+	]
+}
+```
 
 
 ### Duplication

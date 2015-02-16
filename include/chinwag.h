@@ -44,6 +44,7 @@ typedef unsigned long cwerror_t;
 // internal dictionary row
 typedef struct dictionary_type {
   bool sorted;
+  unsigned long marks;
   unsigned long count;
   unsigned long largest;
   unsigned long largest_pos;
