@@ -374,7 +374,7 @@ By default, when closing a dictionary, a blank dictionary is returned. This valu
 #include <chinwag.h>
 cwdict_t seuss = cwdict_open_with_name_and_tokens("Seussian",
 dict_seuss, CW_DELIMITERS);
-cwdict_t latin = cwdict_open_with_name_and_tokens("Seussian",
+cwdict_t latin = cwdict_open_with_name_and_tokens("Latin",
 dict_seuss, CW_DELIMITERS);
 cwdict_close(latin);
 cwdict_t blank = cwdict_close(seuss);
